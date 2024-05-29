@@ -1,9 +1,9 @@
- 
-import './App.css';
-import Navbar from './Navbar.js';
+ import './App.css';
+import Navbar from './component/Navbar.js';
+import Home from './component/Home';
 import { useState, useEffect } from 'react';
-import UploadSuccess from './UploadSuccess.js';
-
+import {Router,Route,Routes} from 'react-router-dom';
+import axios from 'axios';
  
 
 function App() {
@@ -38,8 +38,14 @@ function App() {
 
   return (
     <div className="container">
-      <Navbar onConnectWallet={getWalletAddress} walletAddress={walletAddress}/>
-     <UploadSuccess/>
+      <Router>
+        <Navbar onConnectWallet={getWalletAddress} walletAddress={walletAddress}/>
+        <Routes> 
+          <Route path='/' element={<Home />} />
+        </Routes>
+      </Router>
+      
+     
     </div>
   );
 }
