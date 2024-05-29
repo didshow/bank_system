@@ -38,12 +38,13 @@ function App() {
 
   return (
     <div className="container">
-      <Router>
-        <Navbar onConnectWallet={getWalletAddress} walletAddress={walletAddress}/>
+    <Navbar onConnectWallet={getWalletAddress} walletAddress={walletAddress}/>
+      {/* <Router>
+        
         <Routes> 
           <Route path='/' element={<Home />} />
         </Routes>
-      </Router>
+      </Router> */}
       
      
     </div>
