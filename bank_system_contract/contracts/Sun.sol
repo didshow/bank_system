@@ -30,7 +30,6 @@ contract Sun {
     uint256 public live;      // active live
     uint256 public tsb;       // total saving balance
     UniLike public uni;      // universe bank
-    uint256 public reward;
 
     mapping(address => Account) public accounts;  // account data
 
@@ -84,13 +83,11 @@ contract Sun {
 
     // --saving reward caluc--
     function drip(address usr) external{
-        reward = 0;
         require(block.timestamp >= accounts[usr].nst, "Sun/invalid-now");
         uint256 rwd = _rmul(_rpow(ssr, block.timestamp - accounts[usr].nst, ONE), accounts[usr].bal) - accounts[usr].bal;
         require(uni.stars(address(this)) >= rwd, "Sun/sun-not-enough-stars");
         
         uni.move(address(this), usr, rwd);
-        reward = rwd;
         accounts[msg.sender].nst = block.timestamp;
     }
 

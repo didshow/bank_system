@@ -71,7 +71,7 @@ contract Universe {
         emit Transfer(src, dst, amount);
     }
 
-    function move(address src, address dst, uint256 amount) external {
+    function move(address src, address dst, uint256 amount) external auth{
         stars[src] -= amount;
         stars[dst] += amount;
         emit Transfer(src, dst, amount);
