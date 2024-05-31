@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import pkg from 'hardhat'
+import calculateInterestReward from './utils/calculateInterestReward.js'
 const { ethers } = pkg
 
 describe("Sun Contract", function () {
@@ -69,20 +70,35 @@ describe("Sun Contract", function () {
       await universe.connect(user1).deposit(user1.address, 10000)
     })
     it("should correctly calculate and transfer the saving reward", async function () {
+      // console.log("ownerWard:" + await universe.wards(owner.address))
+
+      // await universe.connect(owner).rely(user1.address)
+      //owner authorize user1's sun contractAddress to join
+      await universe.connect(owner).rely(sun.address)
+
+      // console.log("user1Ward:" + await universe.wards(user1.address))
       // user1 join 1000 tokens to benifit
       await sun.connect(user1).join(1000)
 
-      await sun.accounts(user1.address)
+      //record user1's universeStar after join （10000-1000）
       const user1UniverseStar = await universe.stars(user1.address)
-      // console.log(user1UniverseStar)
+
+      //get user1 balance & saving time
+      const accountUser1 = await sun.accounts(user1.address)
+      const accountBalance = accountUser1.bal
+      const newSavingTime = accountUser1.nst
+
       // wait one year
       await ethers.provider.send("evm_increaseTime", [31536000])
       await ethers.provider.send("evm_mine", [])
+      const currentTime = (await ethers.provider.getBlock("latest")).timestamp
 
       // withdraw your reward
       await sun.drip(user1.address)
-      const oneYearReward = await sun.reward()
-      console.log(oneYearReward)
+
+      //calculate reward
+      const oneYearReward = await calculateInterestReward(newSavingTime, currentTime, accountBalance)
+      // console.log(oneYearReward)
 
       expect(oneYearReward).to.be.closeTo(80, 1)
 
@@ -98,6 +114,8 @@ describe("Sun Contract", function () {
       // console.log(await universe.stars(user1.address))
       const saving = 1000
       // user1 join 1000 tokens to benifit
+      //owner authorize user1's sun contractAddress to join
+      await universe.connect(owner).rely(sun.address)
       await sun.connect(user1).join(saving)
 
       const user1UniverseStar = await universe.stars(user1.address)
@@ -112,6 +130,7 @@ describe("Sun Contract", function () {
 
     })
   })
+
   describe('file', () => {
     beforeEach(async function () {
       [owner, user1, user2] = await ethers.getSigners()
