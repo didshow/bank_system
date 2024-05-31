@@ -29,7 +29,7 @@ http://127.0.0.1:3001
 ### 存款 deposit
 
 将自己的钱存入Universe
-// 1.判断账户是否有足够的Star Token，需要用到Star中的balanceOf 
+// 1.用户的地址对Universe的地址进行Approve
 // 2.调用universe.deposit存款
 
 ### 取款 withdraw
@@ -49,3 +49,15 @@ http://127.0.0.1:3001
 取消定期存款
 
 ### 查询账户余额 getBalance
+
+### 测试地址
+
+Star: 0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9
+Sun: 0x5FC8d32690cc91D4c39d9d3abcBD16989F875707
+Universe: 0x5FC8d32690cc91D4c39d9d3abcBD16989F875707
+Deploy_Hardhat_Account: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+Test_Hardhat_Account: 0x2546BcD3c84621e976D8185a91A922aE77ECEc30
+
+### Bug1
+
+deposit方法要检查输入的账户地址必须是Star Token的Owner，这里不知道用什么来判断
