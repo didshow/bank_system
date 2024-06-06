@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { deposit } from './utils/deposit.js';
 import { withdraw } from './utils/withdraw.js';
 import { drip } from './utils/drip.js';
+import { exit } from './utils/exit.js';
 import { checkErc20Address } from './utils/checkErc20Address.js';
 import { saving, calculateInterest } from './utils/sun.js';
 dotenv.config("./.env");
@@ -58,6 +59,16 @@ app.post('/transaction', (req, res) => {
                 res.json({ message: `成功存入 ${transactionAmount} ` });
             } else {
                 res.status(400).json({ message: `存入失败，存入金额必须大于0` });
+            }
+        case 'cancelSaving':
+            try {
+                //checkErc20Address(req,res);
+                exit(transactionAmount);
+                // 如果取款成功，发送成功的 JSON 响应
+                res.json({ message: `成功从定期中取款 ${transactionAmount} ` });
+            } catch (error) {
+                // 如果取款失败，发送失败的 JSON 响应
+                res.status(400).json({ message: `取款失败：${error.message}` });
             }
         case 'drip':
             try {
