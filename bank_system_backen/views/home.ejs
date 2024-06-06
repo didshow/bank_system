@@ -13,9 +13,14 @@
     <form action="/transaction" method="POST">
         <!-- name 和 transaction、app.js内的字段名一致 -->
         <input type="text" name="accountAddress" placeholder="账户地址">
+        <br><br>       
+        <input type="text" name="withdrawAddress" placeholder="取款地址">
         <br><br>
         <input type="radio" name="transactionType" value="deposit" checked> 存款
         <input type="radio" name="transactionType" value="withdraw"> 取款
+        <input type="radio" name="transactionType" value="drip" >提取利息
+        <input type="radio" name="transactionType" value="cancelSaving"> 取定期
+        <input type="radio" name="transactionType" value="saving"> 存定期
         <br><br>
         <input type="text" name="transactionAmount" placeholder="金额">
         <input type="submit" value="提交">

@@ -2,20 +2,39 @@
   text-align: center;
 }
 
+body {
+  background-image: url("image/image.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
 #container {
-    /* width: 180vh; */
-    /* border: 4px dashed rgba(4, 4, 5, 0.1); */
-    min-height: 160px;
-    padding: 32px;
-    position: relative;
-    border-radius: 16px;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: left;
-    word-break: break-word;
+  /* width: 180vh; */
+  /* border: 4px dashed rgba(4, 4, 5, 0.1); */
+  min-height: 160px;
+  padding: 32px;
+  position: relative;
+  border-radius: 16px;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: left;
+  word-break: break-word;
+  display: flex;
+}
+
+.navbar-links {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.navbar-link {
+  margin: 0 1rem;
+  text-decoration: none;
 }
 
 .upload-container {
@@ -78,7 +97,7 @@
 }
 
 .navbar-brand {
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 
 .navbar-menu {
@@ -96,16 +115,22 @@
 }
 
 input#title::placeholder {
-  font-family: sans-serif; /* Replace with your desired font family */
-  font-size: 16px; /* Replace with your desired font size */
-  color: #a9a9a9; /* Replace with your desired color */
+  font-family: sans-serif;
+  /* Replace with your desired font family */
+  font-size: 16px;
+  /* Replace with your desired font size */
+  color: #a9a9a9;
+  /* Replace with your desired color */
 }
 
 /* Change the placeholder font style for description textarea */
 textarea#description::placeholder {
-  font-family: sans-serif; /* Replace with your desired font family */
-  font-size: 16px; /* Replace with your desired font size */
-  color: #a9a9a9; /* Replace with your desired color */
+  font-family: sans-serif;
+  /* Replace with your desired font family */
+  font-size: 16px;
+  /* Replace with your desired font size */
+  color: #a9a9a9;
+  /* Replace with your desired color */
 }
 
 .nft-grid {
@@ -154,4 +179,37 @@ textarea#description::placeholder {
 
 .navbar a {
   color: white;
+}
+
+
+.home-title {
+  font-weight: 700;
+  font-display: block;
+  font-size: 4rem;
+  text-align: center;
+  margin-top: 200px;
+  color: #151c25;
+}
+
+.home-text {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-top: 20px;
+  color: #333;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.connect-wallet-button-home {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  margin-top: 20px;
 }
