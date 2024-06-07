@@ -6,8 +6,8 @@ import { deposit } from './utils/deposit.js';
 import { withdraw } from './utils/withdraw.js';
 import { drip } from './utils/drip.js';
 import { exit } from './utils/exit.js';
-import { checkErc20Address } from './utils/checkErc20Address.js';
-import { saving, calculateInterest } from './utils/sun.js';
+// import { checkErc20Address } from './utils/checkErc20Address.js';
+import { saving } from './utils/sun.js';
 dotenv.config("./.env");
 
 const app = express();
@@ -19,15 +19,7 @@ app.use(cors());
 app.get('/', (req, res) => {
     res.render("home");
 });
-app.get('/drip', (req, res) => {
-    res.render("drip");
-});
-app.get('/deposit', (req, res) => {
-    res.render("deposit");
-});
-app.get('/withdraw', (req, res) => {
-    res.render("withdraw");
-});
+
 // TODO
 app.post('/transaction', (req, res) => {
     const { accountAddress, transactionType, transactionAmount } = req.body;
