@@ -10,37 +10,40 @@ export async function saving(amount) {
 
     try {
         const SunAbi = JSON.parse(fs.readFileSync('./abis/Sun.json'));
-
         // 创建合约实例
-        const SunContract = new ethers.Contract(process.env.UNI_ADDRESS, SunAbi, signer);
+        const SunContract = new ethers.Contract(process.env.SUN_ADDRESS, SunAbi, signer);
         const result = await SunContract.join(amount);
         console.log(result);
     } catch (err) {
         console.log(err)
     }
 }
-
 // 计算利息
-export async function calculateInterest(userAddress) {
+export async function getBalance(userAddress) {
     const provider = new JsonRpcProvider(process.env.RPC);
     const signer = await provider.getSigner();
 
     try {
         const SunAbi = JSON.parse(fs.readFileSync('./abis/Sun.json'));
-
         // 创建合约实例
-        const SunContract = new ethers.Contract(process.env.UNI_ADDRESS, SunAbi, signer);
+        const SunContract = new ethers.Contract(process.env.SUN_ADDRESS, SunAbi, signer);
         // const result = await SunContract.join(amount);
         const account = await SunContract.account(userAddress);
+
+        const DepositAbi = JSON.parse(fs.readFileSync('./abis/Universe.json'));
+        // 创建合约实例
+        const DepositContract = new ethers.Contract(process.env.UNI_ADDRESS, DepositAbi, signer);
+        const star = await DepositContract.stars(userAddress);
+
         // 获取合约当前的ssr和ONE值
         const ssr = await contract.ssr();
         const ONE = await contract.ONE()
-        console.log(result);
+        // console.log(result);
         // 计算利息 
         const interest = await calculateInterestLogic(account.bal, account.nst, ssr, ONE);
-
-        return interest;
-
+        const balance = star + interest;
+        console.log(balance);
+        return balance;
     } catch (err) {
         console.log(err)
     }
@@ -49,13 +52,13 @@ async function calculateInterestLogic(balance, lastTimestamp, ssr, ONE) {
     const currentTime = Math.floor(new Date().getTime() / 1000);
     const timeDifference = currentTime - lastTimestamp;
     // 复利利息计算——和solidity内逻辑一致，_rmul(_rpow(ssr, block.timestamp - accounts[usr].nst, ONE), accounts[usr].bal) - accounts[usr].bal;
-    const interest = rmul(solidityRpow(ssr, timeDifference, ONE), balance)-balance;
+    const interest = rmul(solidityRpow(ssr, timeDifference, ONE), balance) - balance;
     return interest;
 }
 
 function rmul(x, y) {
     const z = (x * y) / ONE;
-    return z; 
+    return z;
 }
 
 function solidityRpow(x, n, base) {
