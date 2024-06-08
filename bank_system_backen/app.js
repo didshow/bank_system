@@ -20,6 +20,9 @@ app.get('/', (req, res) => {
     res.render("home");
 });
 
+app.get('/transaction', (req, res) => {
+    res.render("home")
+})
 // TODO
 app.post('/transaction', (req, res) => {
     const { accountAddress, transactionType, transactionAmount } = req.body;
