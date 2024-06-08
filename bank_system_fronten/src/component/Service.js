@@ -5,11 +5,12 @@ import InterestCard from './InterestCard';
 import utils from './utils';
 
 const { Text } = Typography;
-
+// package.json 中的 proxy 配置,不用每次都配置API_URL
+//  "proxy": "http://localhost:3001"
 const API_URL = 'http://localhost:3001';
 
 const ServicePage = () => {
-    const [walletAddress, setWalletAddress] = useState('');
+    const [walletAddress, setWalletAddress] = useState(null);
     const [amount, setAmount] = useState(0);
     const [balance, setBalance] = useState(0);
     const [toatlbalance, setTotalBalance] = useState(0);
@@ -29,28 +30,55 @@ const ServicePage = () => {
                 Toast.error('获取余额失败');
             }
         };
-
         if (walletAddress) {
             handleGetWalletBalance();
         }
-
         utils.addWalletListener(setWalletAddress); // 将 setWalletAddress 作为参数传递
     }, [walletAddress]); // 当 walletAddress 变化时运行
 
     useEffect(() => {
         utils.addWalletListener(setWalletAddress);
-      }, []);
+    }, []);
+
+    useEffect(() => {
+        const fetchWalletAddress = async () => {
+            const address = await utils.getWalletAddress();
+            setWalletAddress(address);
+        };
+        fetchWalletAddress();
+    }, []);
 
     const handleDeposit = async () => {
+        console.log("deposit => begin");
+        console.log("address=>", walletAddress);
+
+        if (!walletAddress) {
+            Toast.error("钱包地址不能为空");
+            return;
+        }
+
         try {
+            // 使用 axios 发送 POST 请求
             const response = await axios.post(`${API_URL}/transaction`, {
                 accountAddress: walletAddress,
                 transactionType: 'deposit',
                 transactionAmount: amount,
             });
+
+            // 请求成功后的操作
+            console.log("Response from server:", response);
             Toast.success(response.data.message);
+
+            console.log("deposit => end");
         } catch (error) {
-            Toast.error(error.response ? error.response.data.message : error.message);
+            // 请求失败后的操作
+            console.error("Error during deposit:", error);
+
+            // 根据错误类型显示不同的错误消息
+            const errorMessage = error.response
+                ? error.response.data.message
+                : error.message;
+            Toast.error(errorMessage);
         }
     };
 
@@ -130,7 +158,7 @@ const ServicePage = () => {
             const nextPowerOfTen = Math.pow(10, Math.ceil(Math.log10(balance)));
             // 返回这个10的幂除以100
             var step = nextPowerOfTen / 100;
-            console.log('step', step);
+            // console.log('step', step);
             return step;
         } catch (error) {
             console.error('Failed to calculate step value:', error);

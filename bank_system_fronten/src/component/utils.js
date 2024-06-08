@@ -3,7 +3,7 @@ import Web3 from 'web3';
 const utils = {
     getWalletAddress: async () => {
         if (window.ethereum) {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts'});
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             let Faddress = accounts[0];
             console.log('getWalletAddress', Faddress)
             return Faddress;
@@ -19,7 +19,7 @@ const utils = {
             const accounts = await web3.eth.getAccounts();
             const accountAddress = accounts[0];
             console.log("Account Address:", accountAddress);
-    
+
             // 获取账户余额
             const balance = await web3.eth.getBalance(accountAddress);
             const balanceInEth = web3.utils.fromWei(balance, 'ether');
@@ -33,6 +33,7 @@ const utils = {
 
     addWalletListener: (setWalletAddress) => {
         if (window.ethereum) {
+            console.log('addWalletListener => ', window.ethereum)
             window.ethereum.on('accountsChanged', function (accounts) {
                 if (accounts.length > 0) {
                     console.log('setWalletAddress', accounts[0])
@@ -45,7 +46,7 @@ const utils = {
             console.log('Please install MetaMask');
         }
     }
-    
+
 }
 
 export default utils;

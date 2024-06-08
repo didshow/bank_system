@@ -16,7 +16,8 @@ export async function deposit(address, amount) {
         const DepositContract = new ethers.Contract(process.env.UNI_ADDRESS, DepositAbi, signer);
         // 执行deposit函数
         const result = await DepositContract.deposit(address, amount);
-        console.log(result);
+        console.log("deposit => ", result);
+        return result;
     } catch (err) {
         console.log(err)
     }
