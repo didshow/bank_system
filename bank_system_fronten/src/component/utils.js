@@ -2,8 +2,14 @@ import Web3 from 'web3';
 
 const utils = {
     getWalletAddress: async () => {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        return accounts[0];
+        if (window.ethereum) {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts'});
+            let Faddress = accounts[0];
+            console.log('getWalletAddress', Faddress)
+            return Faddress;
+        } else {
+            alert('Please install metamask');
+        }
     },
 
     getWalletBalance: async () => {
@@ -25,10 +31,11 @@ const utils = {
         }
     },
 
-    addWalletListener: (setWalletAddress ) => {
+    addWalletListener: (setWalletAddress) => {
         if (window.ethereum) {
             window.ethereum.on('accountsChanged', function (accounts) {
                 if (accounts.length > 0) {
+                    console.log('setWalletAddress', accounts[0])
                     setWalletAddress(accounts[0]);
                 } else {
                     setWalletAddress('');

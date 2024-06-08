@@ -7,7 +7,7 @@ import { withdraw } from './utils/withdraw.js';
 import { drip } from './utils/drip.js';
 import { exit } from './utils/exit.js';
 // import { checkErc20Address } from './utils/checkErc20Address.js';
-import { saving } from './utils/sun.js';
+import { getBalance, saving } from './utils/sun.js';
 dotenv.config("./.env");
 
 const app = express();
@@ -71,6 +71,15 @@ app.post('/transaction', (req, res) => {
             } catch (error) {
                 // 如果存款失败，发送失败的 JSON 响应
                 res.status(400).json({ message: `提取利息失败：${error.message}` });
+            }
+        case 'getBalance':
+            try {
+                getBalance(accountAddress);
+                // 如果存款成功，发送成功的 JSON 响应
+                res.json({ message: `成功获取账户 ${accountAddress} 的余额` });
+            } catch (error) {
+                // 如果存款失败，发送失败的 JSON 响应
+                res.status(400).json({ message: `获取余额失败：${error.message}` });
             }
     }
 });
