@@ -13,8 +13,12 @@ dotenv.config("./.env");
 const app = express();
 
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+app.use(bodyParser.json());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    headers: ['Content-Type', 'Authorization'],
+}));
 
 app.get('/', (req, res) => {
     res.render("home");
@@ -22,7 +26,8 @@ app.get('/', (req, res) => {
 
 // TODO
 app.post('/transaction', (req, res) => {
-    const { accountAddress, transactionType, transactionAmount } = req.body;
+    const { accountAddress, transactionType, transactionAmount, withdrawAddress} = req.body;
+    console.log(req.body);
     switch (transactionType) {
         case 'deposit':
             try {
@@ -34,6 +39,7 @@ app.post('/transaction', (req, res) => {
                 // 如果存款失败，发送失败的 JSON 响应
                 res.status(400).json({ message: `存款失败：${error.message}` });
             }
+            break;
         case 'withdraw':
             try {
                 //checkErc20Address(req,res);
@@ -44,6 +50,7 @@ app.post('/transaction', (req, res) => {
                 // 如果取款失败，发送失败的 JSON 响应
                 res.status(400).json({ message: `取款失败：${error.message}` });
             }
+            break;
         case 'saving':
             // 前端在这里需要判断当前账户的余额是否>transactionAmount
             if (transactionAmount > 0) {
@@ -52,6 +59,7 @@ app.post('/transaction', (req, res) => {
             } else {
                 res.status(400).json({ message: `存入失败，存入金额必须大于0` });
             }
+            break;
         case 'cancelSaving':
             try {
                 //checkErc20Address(req,res);
@@ -62,6 +70,7 @@ app.post('/transaction', (req, res) => {
                 // 如果取款失败，发送失败的 JSON 响应
                 res.status(400).json({ message: `取款失败：${error.message}` });
             }
+            break;
         case 'drip':
             try {
                 //checkErc20Address(req, res);
@@ -72,15 +81,17 @@ app.post('/transaction', (req, res) => {
                 // 如果存款失败，发送失败的 JSON 响应
                 res.status(400).json({ message: `提取利息失败：${error.message}` });
             }
+            break;
         case 'getBalance':
             try {
-                getBalance(accountAddress);
+                let balance = getBalance(accountAddress);
                 // 如果存款成功，发送成功的 JSON 响应
-                res.json({ message: `成功获取账户 ${accountAddress} 的余额` });
+                res.json({ message: `成功获取账户 ${accountAddress} 的余额`, balance: balance});
             } catch (error) {
                 // 如果存款失败，发送失败的 JSON 响应
                 res.status(400).json({ message: `获取余额失败：${error.message}` });
             }
+            break;
     }
 });
 

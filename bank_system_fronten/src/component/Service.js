@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Toast, Card, Typography, Divider, Slider, InputNumber } from '@douyinfe/semi-ui';
+import { Button, Form, Toast, Card, Typography, Divider, Slider, InputNumber ,Input} from '@douyinfe/semi-ui';
 import axios from 'axios';
 import InterestCard from './InterestCard';
 import utils from './utils';
@@ -13,18 +13,18 @@ const ServicePage = () => {
     const [amount, setAmount] = useState(0);
     const [balance, setBalance] = useState(0);
     const [toatlbalance, setTotalBalance] = useState(0);
+    const [depositAddress, setDepositAddress] = useState('');
+    const [withdrawAddress, setWithdrawAddress] = useState('');
     const [ssr, setSsr] = useState(0);
 
 
     // 获取钱包余额的 useEffect
     useEffect(() => {
-        utils.addWalletListener(setWalletAddress);
         const handleGetWalletBalance = async () => {
             try {
                 const balance = await utils.getWalletBalance();
                 setBalance(balance);
                 Toast.success('余额已更新');
-                console.log('balance', balance);
             } catch (error) {
                 Toast.error('获取余额失败');
             }
@@ -37,14 +37,22 @@ const ServicePage = () => {
         utils.addWalletListener(setWalletAddress); // 将 setWalletAddress 作为参数传递
     }, [walletAddress]); // 当 walletAddress 变化时运行
 
+
+
     useEffect(() => {
-        utils.addWalletListener(setWalletAddress);
-      }, []);
+        const fetchWalletAddress = async () => {
+            const address = await utils.getWalletAddress();
+            setWalletAddress(address);
+        };
+        fetchWalletAddress();
+    }, []);
 
     const handleDeposit = async () => {
         try {
+            console.log("deposit address",depositAddress)
+            console.log("amount",amount)
             const response = await axios.post(`${API_URL}/transaction`, {
-                accountAddress: walletAddress,
+                accountAddress: depositAddress,
                 transactionType: 'deposit',
                 transactionAmount: amount,
             });
@@ -58,6 +66,7 @@ const ServicePage = () => {
         try {
             const response = await axios.post(`${API_URL}/transaction`, {
                 accountAddress: walletAddress,
+                withdrawAddress: withdrawAddress, 
                 transactionType: 'withdraw',
                 transactionAmount: amount,
             });
@@ -75,6 +84,7 @@ const ServicePage = () => {
                 transactionAmount: amount,
             });
             Toast.success(response.data.message);
+            handleGetTotalBalance();
         } catch (error) {
             Toast.error(error.response ? error.response.data.message : error.message);
         }
@@ -88,6 +98,7 @@ const ServicePage = () => {
                 transactionAmount: amount,
             });
             Toast.success(response.data.message);
+            handleGetTotalBalance();
         } catch (error) {
             Toast.error(error.response ? error.response.data.message : error.message);
         }
@@ -100,6 +111,7 @@ const ServicePage = () => {
                 transactionType: 'drip',
             });
             Toast.success(response.data.message);
+            handleGetTotalBalance();
         } catch (error) {
             Toast.error(error.response ? error.response.data.message : error.message);
         }
@@ -110,15 +122,16 @@ const ServicePage = () => {
     };
 
     const handleGetTotalBalance = async () => {
-        Toast.info('Getting total balance...');
+        console.log('Getting total balance...');
         try {
-            Toast.info('walletAddress', walletAddress);
+            console.log('walletAddress:', walletAddress);
             const response = await axios.post(`${API_URL}/transaction`, {
                 accountAddress: walletAddress,
                 transactionType: 'getBalance',
             });
-            setTotalBalance(response.data.balance);
-            Toast.success(response.data.message);
+            // setTotalBalance(response.data.balance);
+            console.log('message', parseFloat(response.data.balance));
+            Toast.success(`Balance: ${parseFloat(response.data.balance)}`);
         } catch (error) {
             Toast.error(error.response ? error.response.data.message : error.message);
         }
@@ -137,6 +150,7 @@ const ServicePage = () => {
             return 0.1; // 返回一个默认值
         }
     };
+
 
     return (
         <div style={{ padding: '20px' }}>
@@ -159,9 +173,17 @@ const ServicePage = () => {
                                 <Text>Balance: {balance} ETH</Text>
                             </div>
                         </div>
-                        <div style={{ marginBottom: '12px' }}>
-                            <Button type="primary" onClick={handleDeposit} style={{ marginRight: '12px' }}>Deposit</Button>
-                            <Button type="secondary" onClick={handleWithdraw} style={{ marginRight: '12px' }}>Withdraw</Button>
+                        <div style={{ padding: '0px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                    <Input addonBefore="deposit to" style={{ flex: 1, marginRight: '12px'}} onChange={value => setDepositAddress(value)} />
+                                    <Button type="primary" onClick={handleDeposit} style={{ flexBasis: '100px' }}>Deposit</Button>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                    <Input addonBefore="withdraw to" style={{ flex: 1, marginRight: '12px'}} value={withdrawAddress} onChange={value => setWithdrawAddress(value)} />
+                                    <Button type="secondary" onClick={handleWithdraw} style={{ flexBasis: '100px' }}>Withdraw</Button>
+                                </div>
+                            </div>
                         </div>
                     </Form>
                 </Card>
@@ -169,7 +191,7 @@ const ServicePage = () => {
                 <Card
                     title={
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span>Sun Service</span>
+                            <span >Sun Service</span>
                             <Button onClick={handleGetTotalBalance}>Get Balance</Button>
                         </div>
                     }
@@ -181,11 +203,11 @@ const ServicePage = () => {
                                 onNumberChange={value => handleAmountChange(Number(value))}
                                 min={0}
                                 step={getStepValue()}
-                                max={balance}
+                                max={toatlbalance}
                                 value={amount}
                             />
                             <div style={{ marginTop: 20 }}>
-                                <Text>Total Balance: {balance} ETH</Text>
+                                <Text>Total Balance: {toatlbalance} ETH</Text>
                             </div>
                         </div>
                         <Slider

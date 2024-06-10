@@ -18,7 +18,6 @@ const utils = {
             await window.ethereum.enable();
             const accounts = await web3.eth.getAccounts();
             const accountAddress = accounts[0];
-            console.log("Account Address:", accountAddress);
     
             // 获取账户余额
             const balance = await web3.eth.getBalance(accountAddress);
@@ -44,6 +43,12 @@ const utils = {
         } else {
             console.log('Please install MetaMask');
         }
+    },
+
+    getSsr: () => {
+        // 通过合约获取ssr
+        let ssr = 0.0387 * 1e18;
+        return ssr;
     }
     
 }
