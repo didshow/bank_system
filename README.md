@@ -21,12 +21,12 @@ node.js版本：16.20.0
 `npm install hardhat`
 `npx hardhat node`
 ```
-2.运行express.js
+2.运行后端
 ```
 `npm install`
 `npm  run start`
 ```
-3.运行react.js
+3.运行前端
 ```
 `npm install`
 `npm run start`
