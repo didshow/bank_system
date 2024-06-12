@@ -4,6 +4,7 @@ import Home from './component/Home';
 import Service from './component/Service.js';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import utils from './component/utils';
 //import axios from 'axios';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -11,23 +12,11 @@ function App() {
   const [walletAddress, setWalletAddress] = useState('');
   useEffect(() => {
     //  getWalletAddress();
-    addWalletListener();
+    utils.addWalletListener();
   })
 
 
-  function addWalletListener() {
-    if (window.ethereum) {
-      window.ethereum.on('accountsChanged', function (accounts) {
-        if (accounts.length > 0) {
-          setWalletAddress(accounts[0]);
-        } else {
-          setWalletAddress('');
-        }
-      });
-    } else {
-      console.log('Please install metamask');
-    }
-  }
+
   async function getWalletAddress() {
     if (window.ethereum) {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });

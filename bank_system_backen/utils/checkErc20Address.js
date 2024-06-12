@@ -15,13 +15,13 @@ export const checkErc20Address = async (req, res, next) => {
     }
 
     // 使用 ethers.utils.isAddress 检查地址格式是否有效
-    if (!ethers.utils.isAddress(accountAddress)) {
+    if (!ethers.utils.isAddress(accountAddress.trim())) {
+        console.log(accountAddress);
         try {
             return res.status(400).json({ message: 'Invalid Ethereum account address format' });
         } catch (error) {
             console.error('Error checking Ethereum account address format:', error);
         }
-
     }
 
     const starContractAddress = process.env.STAR_ADDRESS; // Star代币合约地址
