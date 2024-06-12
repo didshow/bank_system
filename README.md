@@ -17,15 +17,17 @@ node.js版本：16.20.0
 1.运行hardhat节点
 
 切换到合约路径
+```
 `npm install hardhat`
 `npx hardhat node`
-
+```
 2.运行express.js
-
+```
 `npm install`
 `npm  run start`
-
+```
 3.运行react.js
-
+```
 `npm install`
 `npm run start`
+```
