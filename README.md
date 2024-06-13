@@ -33,5 +33,12 @@ node.js版本：16.20.0
 ```
 ## 配置相关
 
-配置的合约地址在bank_system_contract 里的deploy.js，已经部署在sepolia测试网上
-
+部署合约地址
+1.sepolia测试链
+    Star deployed to: 0xdab35e4F2a84ed3A7302D1F09EB9A3AB02B53fc7
+    Universe deployed to: 0x258490069358bf1991d582b502125bBc04B3bE15
+    Sun deployed to: 0xa72D4945AC628A1D2Df23Cd4638359075E026A72
+2.hardhat
+    UNI_ADDRESS=0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
+    STAR_ADDRESS=0x5FbDB2315678afecb367f032d93F642f64180aa3
+    SUN_ADDRESS=0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
