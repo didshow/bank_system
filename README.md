@@ -2,13 +2,13 @@
 
 ## 项目介绍
 
-基于智能合约的银行储蓄系统
-核心功能是:
+基于智能合约的银行储蓄系统  
+核心功能是:  
 存款(deposit)、取款(withdraw)、计息存款(saving)、取出本金[这里是取出saving里的balance]、查询余额
 
-后端使用express.js：localhost:3001
-前端使用react.js：localhost:3000
-合约使用hardhat：localhost:8545
+后端使用express.js：localhost:3001  
+前端使用react.js：localhost:3000  
+合约使用hardhat：localhost:8545  
 
 ## 运行步骤
 
